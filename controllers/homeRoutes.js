@@ -29,6 +29,15 @@ router.get('/profile', withAuth, async (req, res) => {
 
     const user = userData.get({ plain: true });
 
+    res.render('profile', {
+      ...user,
+      logged_in: true,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 //USER WILL BE DIRECTED TO SIGNUP PAGE
 router.get('/signup', (req, res) => {
