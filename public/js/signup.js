@@ -19,7 +19,7 @@ const signupForm = async (e) => {
     const response = await fetch('/api/users/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(inputs),
     });
