@@ -27,6 +27,8 @@ router.get('/profile', withAuth, async (req, res) => {
       include: [{ model: Budget }],
     });
 
+    console.log(req.session.user_id)
+
     const user = userData.get({ plain: true });
 
     res.render('profile', {

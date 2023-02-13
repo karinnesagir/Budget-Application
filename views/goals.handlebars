@@ -13,7 +13,7 @@
               Menu
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
               <li><a class="dropdown-item" id='logout-button' href="#">Logout</a></li>
             </ul>
           </li>
@@ -112,13 +112,17 @@
               <tr>
                 <th scope="col">Budget Category</th>
                 <th scope="col">Amount</th>
+                <th scope="col">Date Created</th>
+                
               </tr>
             </thead>
             <tbody>
               {{#each budgets as |Budget|}}
+             
               <tr>
                 <td>{{Budget.category_name}}</td>
-                <td>{{Budget.amount}}</td>
+                <td>${{Budget.amount}}</td>
+                <td>{{format_time Budget.date_created}}</td>
               </tr>
               {{/each}}
             </tbody>
