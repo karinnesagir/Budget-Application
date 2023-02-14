@@ -20,10 +20,17 @@ router.get('/goals', withAuth, async (req, res) => {
   try {
 
     //Get current budgets goals for the user
-    const budgetData = await Budget.findAll({ where: { user_id: req.session.user_id } },
-      {
-        attributes: ['category_id', 'amount'],
-      });
+    const budgetData = await Budget.findAll({ where: { user_id: req.session.user_id } }
+     );
+
+
+     //Get the User Data
+     const userData = await User.findByPk(req.session.user_id, {
+      attributes:  ['name'] 
+    });
+    const user = userData.get({plain:true})
+
+
 
       // Get Budget cateories
       const nameData = await BudgetCategory.findAll({
@@ -37,11 +44,11 @@ router.get('/goals', withAuth, async (req, res) => {
       budgets.forEach((budget) => {
         budget.category_name = names[budget.category_id - 1].category;
       });
-      
+      // console.log(budgets)
       //call the goals.handlebar to display
       res.render('goals', {
-        budgets,
-        logged_in: true,
+        budgets, user,
+        logged_in: req.session.logged_in,
       });
 
   } catch (err) {
@@ -71,7 +78,7 @@ router.get('/:id', async (req, res) => {
 
 
 // Create a budget
-router.post('/', withAuth, async (req, res) => {
+router.post('/', withAuth, async  (req, res) => {
   try {
     const budgetData = await Budget.create({
         amount: req.body.amount,
@@ -92,17 +99,16 @@ router.post('/', withAuth, async (req, res) => {
 });
 
 // Update a budget
-router.put('/:id', withAuth, async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-      const budgetData = await Budget.update({amount: req.body.amount}, {
+      const budgetData = await Budget.update(req.body, {
         where: {
-          category_id: req.params.id,
-          user_id: req.session.user_id
+          id: req.params.id,
         },
         individualHooks: true
       });
       if (!budgetData[0]) {
-        res.status(404).json({ message: 'No budget with this category and user!' });
+        res.status(404).json({ message: 'No user with this id!' });
         return;
       }
       res.status(200).json(budgetData);
@@ -112,18 +118,15 @@ router.put('/:id', withAuth, async (req, res) => {
 });
 
 // Delete a budget
-router.delete('/:id', withAuth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-   
     const budgetData = await Budget.destroy({
       where: {
-        amount: req.body.amount,
-        category_id: req.params.id,
-        user_id: req.session.user_id
+        id: req.params.id,
       },
     });
     if (!budgetData) {
-      res.status(404).json({ message: 'No budget with this category and user!' });
+      res.status(404).json({ message: 'No library card found with that id!' });
       return;
     }
     res.status(200).json(budgetData);
