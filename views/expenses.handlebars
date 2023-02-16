@@ -51,20 +51,7 @@
           <div class="input-group mb-3">
             <input id="note" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
           </div>
-        <div>
-          <div>
-            <b>Expense Amount</b>
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">$</span>
-            <input id="amount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-          </div>
-        </div>
-        <div class="goal-button">
-          <button type="button" value="submit" class="btn btn-outline-info" id="saveButton">Add Expense</button>
-          {{!-- <button type="button" value="submit" class="btn btn-outline-info" id="deleteButton">Delete
-            Expense</button> --}}
-        </div>
+
         </form>
          <div>
           {{user.name}}'s Current Expenses:
@@ -86,12 +73,63 @@
                     <td>${{Expense.amount_spent}}</td>
                     <td>{{Expense.note}}</td>
                     <td>{{format_time Expense.date_created}}</td>
-                    <td><button class="del-btn btn btn-info">Delete</button></td>
                     </tr>
                   {{/each}}
                 </tbody>
               </table>
+
+
+        <div>
+          <div>
+            <b>Expense Amount</b>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input id="amount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+          </div>
+        </div>
+
+        <div class="goal-button">
+          <button type="button" value="submit" class="btn btn-outline-info" id="saveButton">Add Expense</button>
+          {{!-- <button type="button" value="submit" class="btn btn-outline-info" id="deleteButton">Delete
+            Expense</button> --}}
+        </div>
       </form>
+      {{!-- Show the user's expenses --}}
+      <div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 ">
+            <b> {{user.name}}'s Current Expenses: </b>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 ">
+            <table class="table table-bordered table-responsive">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Category</th>
+                  <th scope="col">Amount Spent</th>
+                  <th scope="col">Note</th>
+                  <th scope="col">Date Created</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each expenses as |Expense|}}
+                <tr id="{{Expense.category_id}}">
+                  <td>{{Expense.category_name}}</td>
+                  <td>${{Expense.amount_spent}}</td>
+                  <td>{{Expense.note}}</td>
+                  <td>{{format_time Expense.date_created}}</td>
+                  <td><button class="del-btn btn btn-info">Delete</button></td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
     </div>
     <nav class="bottom-nav">
       <div>Budgetly</div>
