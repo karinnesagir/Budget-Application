@@ -92,7 +92,6 @@ router.get('/expenses', withAuth, async (req, res) => {
 
     //call the goals.handlebar to display
     res.render('expenses', {
-  
       expenses, user,
       logged_in: true,
     });

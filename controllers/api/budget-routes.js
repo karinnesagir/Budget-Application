@@ -70,7 +70,7 @@ router.get('/goals', withAuth, async (req, res) => {
       budget.category_name = names[budget.category_id - 1].category;
       budgets.fund_remaining = budgets[0].amount - expenses[0].amount_spent;
     });
-//
+
     // const budget = budgetData.map((items)=>items.get({plain:true}))
 
 
@@ -91,7 +91,6 @@ router.get('/goals', withAuth, async (req, res) => {
 
     console.log("BUDGET DATAAAAAAAAAAAAAAAAAA",budgets.fund_remaining)
 
-//
 
     //call the goals.handlebar to display
     res.render('goals', {
