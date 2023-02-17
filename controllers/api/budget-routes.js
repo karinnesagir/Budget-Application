@@ -39,7 +39,7 @@ router.get('/goals', withAuth, async (req, res) => {
 
     const budgetData = await Budget.findAll({
       where: { user_id: req.session.user_id },
-      attributes: ['category_id', 'amount', 'fund_remaining', 'date_created']
+      attributes: ['category_id', 'amount', 'fund_remaining', 'date_created', 'id']
     });
 
     //Get the User Data
@@ -58,6 +58,7 @@ router.get('/goals', withAuth, async (req, res) => {
       attributes: ['amount_spent'],
     });
 
+
     const names = nameData.map((name) => name.get({ plain: true }));
 
     const budgets = budgetData.map((budget) => budget.get({ plain: true }));
@@ -68,9 +69,25 @@ router.get('/goals', withAuth, async (req, res) => {
     //add category_name to the data send to goals.handlebar for displaying
     budgets.forEach((budget) => {
       budget.category_name = names[budget.category_id - 1].category;
-      budgets.fund_remaining = budgets[0].amount - expenses[0].amount_spent;
+      // replace the fund remaining in the actual db
+      fund_remaining = budgets[0].amount - expenses[0].amount_spent;
+      Budget.update(fund_remaining, {where: { id: budget.id}})
+      .then(
+        data => {
+          console.log("db update", data)
+        }
+      )
+      .catch(err => console.error(err))
+      console.log("BUDGET DATAAAAAAAAAAAAAAAAAA",fund_remaining)
     });
 
+    const budgetData2 = await Budget.findAll({
+      where: { user_id: req.session.user_id },
+      attributes: ['category_id', 'amount', 'fund_remaining', 'date_created', 'id']
+    });
+
+    const budgets2 = budgetData.map((budget) => budget.get({ plain: true }));
+    
 // //
     // const budget = budgetData.map((items)=>items.get({plain:true}))
 
@@ -90,7 +107,6 @@ router.get('/goals', withAuth, async (req, res) => {
     console.log("00000000000000000",expenses[0].amount_spent)
     console.log("----------------",budgets[0].amount)
 
-    console.log("BUDGET DATAAAAAAAAAAAAAAAAAA",budgets.fund_remaining)
 
     // console.log("00000000000000000",expenses[0].amount_spent)
     // console.log("----------------",budgets[0].amount)
@@ -101,7 +117,7 @@ router.get('/goals', withAuth, async (req, res) => {
 
     //call the goals.handlebar to display
     res.render('goals', {
-      budgets, user,
+      budgets2, user,
       logged_in: true,
     });
 
