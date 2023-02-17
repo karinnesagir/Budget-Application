@@ -1,12 +1,17 @@
 const formCreate = document.getElementById('form-create');
 
+function randomImg() {
+  document.getElementById('random-image').innerHTML = '<img src="https://source.unsplash.com/random/?city">';
+
+}
+
 const signupForm = async (e) => {
   e.preventDefault();
   const firstName = document.getElementById('firstname-input').value.trim();
 
   const email = document.getElementById('email-input').value.trim();
   const password = document.getElementById('password-input').value.trim();
-
+  
   console.log('test');
 
   const inputs = {
@@ -44,3 +49,4 @@ const signupForm = async (e) => {
 };
 
 formCreate.addEventListener('submit', signupForm);
+randomImg();
